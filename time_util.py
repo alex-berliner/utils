@@ -1,3 +1,4 @@
+from dateutil.relativedelta import relativedelta
 from time import *
 from datetime import *
 
@@ -26,7 +27,7 @@ def epoch_to_yyyymmdd(epoch):
             epoch /= 1000
         return strftime('%Y%m%d', localtime(epoch))
     except:
-        print("could not convert epoch %s"%(epoch))
+        print("%s: could not convert epoch %s"%(epoch_to_yyyymmdd.__name__, epoch))
         return ""
 
 def epoch_month_floor(epoch):
@@ -37,18 +38,29 @@ def epoch_month_floor(epoch):
         temp = datetime.fromtimestamp(epoch).replace(day=1, hour=0, minute=0, second=0, microsecond=0)
         return int(temp.strftime('%s'))
     except:
-        print("could not convert epoch %s"%(epoch))
+        print("%s: could not convert epoch %s"%(epoch_month_floor.__name__, epoch))
         return ""
+
+def epoch_to_yyyy_mm_dd(epoch):
+    try:
+        epoch=int(epoch)
+        if epoch > 9999999999:
+            epoch /= 1000
+        return strftime('%Y_%m_%d', localtime(epoch))
+    except:
+        print("%s: could not convert epoch %s"%(epoch_to_yyyymmdd.__name__, epoch))
+        return ""
+
 
 def epoch_month_ceil(epoch):
     try:
         epoch=int(epoch)
         if epoch > 9999999999:
             epoch /= 1000
-        temp = datetime.fromtimestamp(epoch).replace(day=1, hour=0, minute=0, second=0, microsecond=0) + timedelta(months=1)
+        temp = datetime.fromtimestamp(epoch).replace(day=1, hour=0, minute=0, second=0, microsecond=0) + relativedelta(months=1)
         return int(temp.strftime('%s'))
     except:
-        print("could not convert epoch %s"%(epoch))
+        print("%s: could not convert epoch %s"%(epoch_month_ceil.__name__, epoch))
         return ""
 
 def datetime_month_delta(e1, e2):
@@ -62,7 +74,7 @@ def datetime_month_delta(e1, e2):
         e1 = datetime.fromtimestamp(e1)
         e2 = datetime.fromtimestamp(e2)
     except:
-        print("could not convert epoch %s %s"%(e1, e2))
+        print("%s: could not convert epoch %s %s"%(datetime_month_delta.__name__, e1, e2))
         return ""
     return (e2.year - e1.year) * 12 + e2.month - e1.month
 
